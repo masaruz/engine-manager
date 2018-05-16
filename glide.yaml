@@ -1,7 +1,5 @@
 package: engine-manager
 import:
-- package: github.com/gorilla/mux
-  version: ~1.6.2
 - package: k8s.io/api
   subpackages:
   - core/v1

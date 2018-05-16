@@ -1,5 +1,5 @@
-hash: 80f7a823c9b72e458a1f9c876fccc65ed051aecdd97ace8f90250e83bf1bc9cc
-updated: 2018-05-16T14:43:37.93506+07:00
+hash: b2084f9715fac8e7619465c1c1b3e17e8df8b853fc8797d3468a928cf3a12a94
+updated: 2018-05-16T18:10:55.03439+07:00
 imports:
 - name: github.com/ghodss/yaml
   version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
@@ -26,10 +26,6 @@ imports:
   - OpenAPIv2
   - compiler
   - extensions
-- name: github.com/gorilla/context
-  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
-- name: github.com/gorilla/mux
-  version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
 - name: github.com/json-iterator/go
   version: 13f86432b882000a51c6e610c620974462691a97
 - name: github.com/spf13/pflag
