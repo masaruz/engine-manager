@@ -1,5 +1,5 @@
 hash: 80f7a823c9b72e458a1f9c876fccc65ed051aecdd97ace8f90250e83bf1bc9cc
-updated: 2018-05-16T14:09:51.172529+07:00
+updated: 2018-05-16T14:43:37.93506+07:00
 imports:
 - name: github.com/ghodss/yaml
   version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
@@ -31,11 +31,9 @@ imports:
 - name: github.com/gorilla/mux
   version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
 - name: github.com/json-iterator/go
-  version: 2ddf6d758266fcb080a4f9e054b9f292c85e6798
-- name: github.com/modern-go/concurrent
-  version: bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94
-- name: github.com/modern-go/reflect2
-  version: 05fbef0ca5da472bbf96c9322b84a53edc03c9fd
+  version: 13f86432b882000a51c6e610c620974462691a97
+- name: github.com/spf13/pflag
+  version: 4c012f6dcd9546820e378d0bdda4d8fc772cdfea
 - name: golang.org/x/crypto
   version: 81e90905daefcd6fd217b62423c0908922eadb30
   subpackages:
@@ -100,12 +98,13 @@ imports:
   - storage/v1alpha1
   - storage/v1beta1
 - name: k8s.io/apimachinery
-  version: 3492ef8dace114d765f20d9c1a03f306449e5252
+  version: 302974c03f7e50f16561ba237db776ab93594ef6
   subpackages:
   - pkg/api/errors
   - pkg/api/meta
   - pkg/api/resource
   - pkg/apis/meta/v1
+  - pkg/apis/meta/v1/unstructured
   - pkg/apis/meta/v1beta1
   - pkg/conversion
   - pkg/conversion/queryparams
