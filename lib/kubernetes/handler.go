@@ -16,7 +16,6 @@ limitations under the License.
 // Note: the example only works with the code within the same release/branch.
 import (
 	"flag"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -79,11 +78,12 @@ func (k *Kube) GetPod(name string) (*v1.Pod, error) {
 
 // GetPodLogs from pod
 func (k *Kube) GetPodLogs(name string) *rest.Request {
-	return k.podInterface.GetLogs(name, &v1.PodLogOptions{})
+	taillines := int64(20)
+	return k.podInterface.GetLogs(name, &v1.PodLogOptions{TailLines: &taillines})
 }
 
 // CreatePod create engine pod with specific version
-func (k *Kube) CreatePod(version string, name string) (*v1.Pod, error) {
+func (k *Kube) CreatePod(image string, name string) (*v1.Pod, error) {
 	return k.podInterface.Create(&v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -94,7 +94,7 @@ func (k *Kube) CreatePod(version string, name string) (*v1.Pod, error) {
 			Containers: []v1.Container{
 				v1.Container{
 					Name:  "engine",
-					Image: fmt.Sprintf("masaruz/engine:%s", version),
+					Image: image,
 				},
 			},
 		},

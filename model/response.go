@@ -17,9 +17,10 @@ type StatusCode int
 
 // StatusCode number
 const (
-	StatusOK             StatusCode = 200
-	StatusGetPodFail     StatusCode = 300
-	StatusGetPodLogsFail StatusCode = 301
+	StatusOK              StatusCode = 200
+	StatusGetPodFail      StatusCode = 300
+	StatusGetPodLogsFail  StatusCode = 301
+	StatusImageNotDefined StatusCode = 302
 )
 
 // Reply payload to sender

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -65,9 +66,17 @@ func GetPods(kube *kubernetes.Kube) http.HandlerFunc {
 func CreatePod(kube *kubernetes.Kube) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		image := os.Getenv("ENGINE_IMAGE")
+		if image == "" {
+			model.Reply(w, model.Response{
+				StatusCode: model.StatusImageNotDefined,
+				Message:    fmt.Sprintf("Please define engine image"),
+			})
+			return
+		}
 		vars := mux.Vars(r)
 		name := vars["name"]
-		kube.CreatePod("0.0.7", name)
+		kube.CreatePod(image, name)
 		resp := model.Response{
 			StatusCode: model.StatusOK,
 			Message:    "Success",
