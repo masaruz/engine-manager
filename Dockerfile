@@ -5,6 +5,6 @@ COPY . .
 
 RUN go install -v # "go install -v ./..."
 
-EXPOSE 8080
+EXPOSE 3000
 
 CMD ["engine-manager"]
