@@ -1,10 +1,10 @@
 FROM golang:1.10
 
-WORKDIR /go/src/manager
+WORKDIR /go/src/engine-manager
 COPY . .
 
 RUN go install -v # "go install -v ./..."
 
 EXPOSE 8080
 
-CMD ["manager"]
+CMD ["engine-manager"]
