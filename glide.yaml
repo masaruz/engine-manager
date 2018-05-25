@@ -11,3 +11,5 @@ import:
   subpackages:
   - kubernetes
   - rest
+- package: github.com/gorilla/mux
+  version: ~1.6.2

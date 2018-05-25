@@ -15,28 +15,76 @@ limitations under the License.
 
 // Note: the example only works with the code within the same release/branch.
 import (
+	"flag"
+	"fmt"
+	"os"
+	"path/filepath"
+
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 )
+
+// Kube handle client
+type Kube struct {
+	podInterface corev1.PodInterface
+}
 
 // Init read kubeconfig
 // in case of inside cluster
-func Init() {
-	// creates the in-cluster config
-	config, err := rest.InClusterConfig()
-	if err != nil {
-		panic(err.Error())
+func Init() *Kube {
+	var (
+		config *rest.Config
+		err    error
+	)
+	if os.Getenv("SCOPE") == "localhost" {
+		var kubeconfig *string
+		if home := homeDir(); home != "" {
+			kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+		} else {
+			kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+		}
+		flag.Parse()
+		// use the current context in kubeconfig
+		config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
+		if err != nil {
+			panic(err.Error())
+		}
+	} else {
+		// creates the in-cluster config
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			panic(err.Error())
+		}
 	}
 	// creates the clientset
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		panic(err.Error())
 	}
-	podInterface := clientset.CoreV1().Pods(metav1.NamespaceDefault)
-	name := "default"
-	podInterface.Create(&v1.Pod{
+	kube := Kube{
+		podInterface: clientset.CoreV1().Pods(metav1.NamespaceDefault),
+	}
+
+	return &kube
+}
+
+// GetPod get engine pod
+func (k *Kube) GetPod(name string) (*v1.Pod, error) {
+	return k.podInterface.Get(name, metav1.GetOptions{})
+}
+
+// GetPodLogs from pod
+func (k *Kube) GetPodLogs(name string) *rest.Request {
+	return k.podInterface.GetLogs(name, &v1.PodLogOptions{})
+}
+
+// CreatePod create engine pod with specific version
+func (k *Kube) CreatePod(version string, name string) (*v1.Pod, error) {
+	return k.podInterface.Create(&v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
@@ -46,9 +94,21 @@ func Init() {
 			Containers: []v1.Container{
 				v1.Container{
 					Name:  "engine",
-					Image: "masaruz/engine", // TODO need to dynamic versioning
+					Image: fmt.Sprintf("masaruz/engine:%s", version),
 				},
 			},
 		},
 	})
+}
+
+// DeletePod delete engine pod with specific name
+func (k *Kube) DeletePod(name string) error {
+	return k.podInterface.Delete(name, &metav1.DeleteOptions{})
+}
+
+func homeDir() string {
+	if h := os.Getenv("HOME"); h != "" {
+		return h
+	}
+	return os.Getenv("USERPROFILE") // windows
 }
